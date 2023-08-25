@@ -407,6 +407,15 @@ void NuPlayer::Decoder::onConfigure(const sp<AMessage> &format) {
 
     mPaused = false;
     mResumePending = false;
+
+    //mtkadd+ for mp3 lowpower
+    int32_t mtkMp3Codec = 0;
+    if (!strcasecmp(mComponentName.c_str(), "OMX.MTK.AUDIO.DECODER.MP3")
+            && format->findInt32("mtkMp3Codec", &mtkMp3Codec)) {
+        ALOGV("turn on mp3 codec lowpower mode,mtkMp3Codec:%d.",mtkMp3Codec);
+        mSource->setGetMp3Param(&mtkMp3Codec, true /*set*/); //set mp3 codec sucessfully
+    }
+//mtkadd-
 }
 
 void NuPlayer::Decoder::onSetParameters(const sp<AMessage> &params) {
